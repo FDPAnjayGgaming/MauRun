@@ -13,20 +13,36 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            
+            // Kolom Wajib Bawaan Laravel (Digunakan untuk Login & Auth)
+            $table->string('name'); // Kita gunakan ini untuk Nama Lengkap
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            
+            // --- KOLOM TAMBAHAN KHUSUS PROJECT MAURUN ---
+            $table->enum('role', ['admin', 'peserta'])->default('peserta');
+            $table->string('nik', 16)->unique()->nullable(); 
+            $table->string('no_hp')->nullable();
+            $table->enum('jenis_kelamin', ['Laki-Laki', 'Perempuan'])->nullable();
+            
+            // Preferensi Default (Bisa diubah user di profil)
+            $table->enum('ukuran_jersey_default', ['S', 'M', 'L', 'XL', 'XXL'])->nullable();
+            $table->enum('golongan_darah_default', ['A', 'B', 'AB', 'O'])->nullable();
+            // ---------------------------------------------
+
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // 2. Tabel Bawaan Laravel (Biarkan persis seperti aslinya)
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // 3. Tabel Bawaan Laravel (Biarkan persis seperti aslinya)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
