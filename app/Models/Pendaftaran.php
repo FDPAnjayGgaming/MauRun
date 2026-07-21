@@ -7,7 +7,7 @@ class Pendaftaran extends Model
 {
     protected $fillable = [
         'user_id', 'event_kategori_id', 'kupon_id', 'harga_awal', 
-        'total_diskon', 'total_bayar', 'ukuran_jersey', 'golongan_darah'
+        'total_diskon', 'total_bayar', 'ukuran_jersey', 'golongan_darah', 'status_pembayaran'
     ];
 
     public function user() {

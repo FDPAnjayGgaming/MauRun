@@ -8,29 +8,29 @@ use App\Http\Controllers\PesertaEventController;
 use App\Http\Controllers\AdminKuponController;
 use App\Http\Controllers\AdminMasterJenisController;
 use App\Http\Controllers\AdminMasterKotaController;
+use App\Http\Controllers\FrontEventController;
 
-// Rute Halaman Utama (Bisa diarahkan ke landing page atau langsung ke katalog)
-Route::get('/', function () {
-    return redirect('/events'); 
-});
+// Rute Halaman Utama
+Route::get('/', [FrontEventController::class, 'landing'])->name('home');
 
 // ==========================================
 // RUTE UNTUK PESERTA (PUBLIK & LOGIN)
 // ==========================================
 
 // Katalog Event (Bisa diakses siapa saja, belum login pun bisa)
-Route::get('/events', function () {
-    return view('peserta.events.index');
-})->name('events');;
+Route::get('/events', [FrontEventController::class, 'index'])->name('events');
+Route::get('/events/{event}', [FrontEventController::class, 'show'])->name('events.show');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/riwayat-pendaftaran', [PesertaEventController::class, 'history'])->name('riwayat-pendaftaran');
+});
 
 // ==========================================
 // RUTE KHUSUS PANITIA / ADMIN
 // ==========================================
 Route::middleware(['auth', 'is_admin'])->group(function () {
 
-    Route::get('/dashboard-panitia', function () {
-        return view('admin.dashboard');
-    })->name('dashboard-panitia');
+    Route::get('/dashboard-panitia', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard-panitia');
 
     Route::resource('manage-events', AdminEventController::class);
 
@@ -47,6 +47,10 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('manage-kota', AdminMasterKotaController::class)
         ->parameters(['manage-kota' => 'kota'])   
         ->except(['create', 'edit', 'show', 'update']);
+
+    // Data Pendaftar
+    Route::get('/manage-pendaftar', [\App\Http\Controllers\AdminPendaftarController::class, 'index'])->name('manage-pendaftar.index');
+    Route::patch('/manage-pendaftar/{id}/status', [\App\Http\Controllers\AdminPendaftarController::class, 'updateStatus'])->name('manage-pendaftar.update-status');
 });
 
 
@@ -55,12 +59,19 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
 
 // ==========================================
-// RUTE PROFIL BAWAAN BREEZE (BIARKAN)
+// RUTE PROFIL BAWAAN BREEZE & PENDAFTARAN EVENT
 // ==========================================
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Pendaftaran Event
+    Route::get('/events/{event}/register', [\App\Http\Controllers\PesertaEventController::class, 'create'])->name('events.register');
+    Route::post('/events/{event}/register', [\App\Http\Controllers\PesertaEventController::class, 'store'])->name('events.register.store');
+    
+    // API Cek Kupon
+    Route::post('/events/check-kupon', [\App\Http\Controllers\PesertaEventController::class, 'checkKupon'])->name('events.check-kupon');
 });
 
 require __DIR__.'/auth.php';

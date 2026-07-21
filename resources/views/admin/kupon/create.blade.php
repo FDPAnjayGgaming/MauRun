@@ -1,58 +1,69 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tambah Kupon Baru</h2>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('manage-kupon.index') }}" class="text-slate-400 hover:text-slate-600 transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+            </a>
+            <h2 class="page-header-title">Tambah Kupon Baru</h2>
+        </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
-                <!-- 1. Tambahkan x-data dengan nilai default 'nominal' -->
+    <div class="max-w-2xl animate-fade-in">
+        <div class="card">
+            <div class="card-body">
+
+                {{-- Alpine.js untuk toggle tipe diskon --}}
                 <form action="{{ route('manage-kupon.store') }}" method="POST" x-data="{ tipeDiskon: '{{ old('tipe_diskon', 'nominal') }}' }">
                     @csrf
-                    
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Kode Kupon</label>
-                        <input type="text" name="kode_kupon" class="w-full border-gray-300 rounded-md uppercase" value="{{ old('kode_kupon') }}" required>
-                        @error('kode_kupon') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+                    <div class="form-group">
+                        <label class="form-label">Kode Kupon</label>
+                        <input type="text" name="kode_kupon" class="form-input-modern uppercase tracking-wider font-mono" value="{{ old('kode_kupon') }}" placeholder="Contoh: DISKON50" required>
+                        @error('kode_kupon') <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 mb-4">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">Tipe Diskon</label>
-                            <!-- 2. Tambahkan x-model -->
-                            <select name="tipe_diskon" x-model="tipeDiskon" class="w-full border-gray-300 rounded-md" required>
+                            <label class="form-label">Tipe Diskon</label>
+                            <select name="tipe_diskon" x-model="tipeDiskon" class="form-input-modern" required>
                                 <option value="nominal">Nominal (Rupiah)</option>
                                 <option value="persentase">Persentase (%)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">Nilai Diskon</label>
-                            <input type="number" name="nilai_diskon" class="w-full border-gray-300 rounded-md" value="{{ old('nilai_diskon') }}" min="0" required>
+                            <label class="form-label">Nilai Diskon</label>
+                            <input type="number" name="nilai_diskon" class="form-input-modern" value="{{ old('nilai_diskon') }}" min="0" required>
                         </div>
                     </div>
 
-                    <!-- 3. Sembunyikan kolom ini secara default, muncul jika tipeDiskon === 'persentase' -->
-                    <div class="mb-4" x-show="tipeDiskon === 'persentase'" x-cloak>
-                        <label class="block text-gray-700 font-bold mb-2">Maksimal Potongan (Rp)</label>
-                        <input type="number" name="maksimal_potongan" class="w-full border-gray-300 rounded-md" value="{{ old('maksimal_potongan') }}" min="0">
-                        <span class="text-xs text-gray-500">Batas maksimal nominal potongan diskon.</span>
+                    {{-- Muncul hanya jika tipe persentase --}}
+                    <div class="form-group" x-show="tipeDiskon === 'persentase'" x-cloak>
+                        <label class="form-label">Maksimal Potongan (Rp)</label>
+                        <input type="number" name="maksimal_potongan" class="form-input-modern" value="{{ old('maksimal_potongan') }}" min="0">
+                        <p class="text-xs text-slate-400 mt-1">Batas maksimal nominal potongan diskon.</p>
                     </div>
-                    
-                    <div class="grid grid-cols-2 gap-4 mb-6">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">Kuota Pemakaian</label>
-                            <input type="number" name="kuota_pemakaian" class="w-full border-gray-300 rounded-md" value="{{ old('kuota_pemakaian') }}" min="1" required>
+                            <label class="form-label">Kuota Pemakaian</label>
+                            <input type="number" name="kuota_pemakaian" class="form-input-modern" value="{{ old('kuota_pemakaian') }}" min="1" required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-bold mb-2">Berlaku Sampai</label>
-                            <input type="date" name="berlaku_sampai" class="w-full border-gray-300 rounded-md" value="{{ old('berlaku_sampai') }}" required>
+                            <label class="form-label">Berlaku Sampai</label>
+                            <input type="date" name="berlaku_sampai" class="form-input-modern" value="{{ old('berlaku_sampai') }}" required>
                         </div>
                     </div>
-                    
-                    <div class="flex gap-2">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Simpan Kupon</button>
-                        <a href="{{ route('manage-kupon.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Batal</a>
+
+                    <div class="flex gap-3 pt-4 border-t border-slate-100">
+                        <button type="submit" class="btn btn-primary">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                            Simpan Kupon
+                        </button>
+                        <a href="{{ route('manage-kupon.index') }}" class="btn btn-ghost">Batal</a>
                     </div>
                 </form>
 

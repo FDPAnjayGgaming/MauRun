@@ -26,7 +26,16 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
+        
+        // Mencegah perubahan NIK, Nama, dan Email dari form profil HANYA UNTUK PESERTA
+        if ($request->user()->role === 'peserta') {
+            unset($validated['name']);
+            unset($validated['email']);
+            unset($validated['nik']);
+        }
+
+        $request->user()->fill($validated);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
