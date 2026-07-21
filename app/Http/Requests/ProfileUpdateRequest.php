@@ -27,7 +27,7 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
             'nik' => ['nullable', 'string', 'size:16', Rule::unique(User::class)->ignore($this->user()->id)],
-            'no_hp' => ['nullable', 'string', 'max:20'],
+            'no_hp' => ['nullable', 'numeric', 'digits_between:10,13', Rule::unique(User::class)->ignore($this->user()->id)],
             'jenis_kelamin' => ['nullable', 'in:Laki-Laki,Perempuan'],
             'ukuran_jersey_default' => ['nullable', 'in:S,M,L,XL,XXL'],
             'golongan_darah_default' => ['nullable', 'in:A,B,AB,O'],

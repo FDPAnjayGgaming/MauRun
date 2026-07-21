@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminKuponController;
 use App\Http\Controllers\AdminMasterJenisController;
 use App\Http\Controllers\AdminMasterKotaController;
 use App\Http\Controllers\FrontEventController;
+use App\Http\Controllers\AdminUserController;
 
 // Rute Halaman Utama
 Route::get('/', [FrontEventController::class, 'landing'])->name('home');
@@ -51,6 +52,11 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     // Data Pendaftar
     Route::get('/manage-pendaftar', [\App\Http\Controllers\AdminPendaftarController::class, 'index'])->name('manage-pendaftar.index');
     Route::patch('/manage-pendaftar/{id}/status', [\App\Http\Controllers\AdminPendaftarController::class, 'updateStatus'])->name('manage-pendaftar.update-status');
+
+    // Kelola User / Peserta
+    Route::resource('manage-users', AdminUserController::class)
+        ->parameters(['manage-users' => 'user'])
+        ->except(['create', 'store', 'show']);
 });
 
 

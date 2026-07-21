@@ -68,8 +68,9 @@
 
             <div>
                 <x-input-label for="no_hp" :value="__('No. HP (WhatsApp)')" />
-                <x-text-input id="no_hp" name="no_hp" type="text" class="mt-1 block w-full" :value="old('no_hp', $user->no_hp)" />
-                <x-input-error class="mt-2" :messages="$errors->get('no_hp')" />
+                <x-text-input id="no_hp" name="no_hp" type="tel" class="mt-1 block w-full" :value="old('no_hp', $user->no_hp)" pattern="[0-9]*" inputmode="numeric" maxlength="13" placeholder="08xxxxxxxxxx" />
+                <p class="mt-1 text-xs text-slate-400">Hanya angka, 10–13 digit.</p>
+                <x-input-error class="mt-1" :messages="$errors->get('no_hp')" />
             </div>
 
             <div>
