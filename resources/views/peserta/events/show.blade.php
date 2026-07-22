@@ -78,10 +78,10 @@
                             <div class="mb-5">
                                 <div class="flex justify-between text-xs font-semibold mb-1.5">
                                     <span class="text-slate-500">Terjual {{ $terjual }}</span>
-                                    <span class="{{ $isPenuh ? 'text-red-500' : 'text-brand-600' }}">Sisa {{ max(0, $sisa) }}</span>
+                                    <span class="{{ $isPenuh ? 'text-red-500' : 'text-brand-600' }}">Sisa {{ max(0,$sisa) }}</span>
                                 </div>
                                 <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                                    <div class="h-2 rounded-full {{ $isPenuh ? 'bg-red-500' : 'bg-brand-500' }}" style="width: {{ min(100, ($terjual / max(1, $kategori->kuota)) * 100) }}%"></div>
+                                    <div class="h-2 rounded-full {{ $isPenuh ? 'bg-red-500' : 'bg-brand-500' }}" style="width: {{ min(100, (max(0, $sisa) / max(1, $kategori->kuota)) * 100) }}%"></div>
                                 </div>
                             </div>
 

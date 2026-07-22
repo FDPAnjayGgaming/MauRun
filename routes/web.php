@@ -51,6 +51,9 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
     // Data Pendaftar
     Route::get('/manage-pendaftar', [\App\Http\Controllers\AdminPendaftarController::class, 'index'])->name('manage-pendaftar.index');
+    Route::get('/manage-pendaftar/{id}/edit', [\App\Http\Controllers\AdminPendaftarController::class, 'edit'])->name('manage-pendaftar.edit');
+    Route::patch('/manage-pendaftar/{id}', [\App\Http\Controllers\AdminPendaftarController::class, 'update'])->name('manage-pendaftar.update');
+    Route::delete('/manage-pendaftar/{id}', [\App\Http\Controllers\AdminPendaftarController::class, 'destroy'])->name('manage-pendaftar.destroy');
     Route::patch('/manage-pendaftar/{id}/status', [\App\Http\Controllers\AdminPendaftarController::class, 'updateStatus'])->name('manage-pendaftar.update-status');
 
     // Kelola User / Peserta
@@ -75,6 +78,7 @@ Route::middleware('auth')->group(function () {
     // Pendaftaran Event
     Route::get('/events/{event}/register', [\App\Http\Controllers\PesertaEventController::class, 'create'])->name('events.register');
     Route::post('/events/{event}/register', [\App\Http\Controllers\PesertaEventController::class, 'store'])->name('events.register.store');
+    Route::delete('/events/register/{id}/cancel', [\App\Http\Controllers\PesertaEventController::class, 'cancel'])->name('events.register.cancel');
     
     // API Cek Kupon
     Route::post('/events/check-kupon', [\App\Http\Controllers\PesertaEventController::class, 'checkKupon'])->name('events.check-kupon');

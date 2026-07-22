@@ -104,19 +104,37 @@
                                     </div>
                                     
                                     @if($pendaftaran->status_pembayaran == 'Lunas')
-                                        <button class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-colors flex items-center shadow-sm">
-                                            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                            </svg>
-                                            E-Tiket
-                                        </button>
+                                        <div class="flex items-center gap-4">
+                                            <span class="text-green-600 text-sm font-bold flex items-center">
+                                                <svg class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Pendaftaran Berhasil
+                                            </span>
+                                            <form method="POST" action="{{ route('events.register.cancel', $pendaftaran->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pendaftaran ini (yang sudah lunas)?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-white border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-slate-500 text-sm font-bold px-4 py-2 rounded-xl transition-colors flex items-center">
+                                                    Batalkan
+                                                </button>
+                                            </form>
+                                        </div>
                                     @elseif($pendaftaran->status_pembayaran == 'Pending')
-                                        <a href="https://wa.me/6281234567890?text=Halo%20Admin%20MauRun,%20saya%20ingin%20konfirmasi%20pembayaran%20untuk%20event%20{{ urlencode($event->nama_event) }}." target="_blank" class="bg-brand-50 hover:bg-brand-100 text-brand-700 text-sm font-bold px-5 py-2.5 rounded-xl transition-colors flex items-center">
-                                            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                                            </svg>
-                                            Konfirmasi
-                                        </a>
+                                        <div class="flex items-center gap-2">
+                                            <form method="POST" action="{{ route('events.register.cancel', $pendaftaran->id) }}" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan pendaftaran ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-white border border-slate-200 hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-slate-500 text-sm font-bold px-5 py-2.5 rounded-xl transition-colors flex items-center">
+                                                    Batalkan
+                                                </button>
+                                            </form>
+                                            <a href="https://wa.me/6281234567890?text=Halo%20Admin%20MauRun,%20saya%20ingin%20konfirmasi%20pembayaran%20untuk%20event%20{{ urlencode($event->nama_event) }}." target="_blank" class="bg-brand-50 hover:bg-brand-100 text-brand-700 text-sm font-bold px-5 py-2.5 rounded-xl transition-colors flex items-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                                </svg>
+                                                Konfirmasi
+                                            </a>
+                                        </div>
                                     @endif
                                 </div>
                             </div>

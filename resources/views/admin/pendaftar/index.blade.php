@@ -96,16 +96,27 @@
                                     @endif
                                     <p class="text-[10px] text-slate-400 mt-1">{{ $pendaftar->created_at->format('d/m/Y H:i') }}</p>
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <form action="{{ route('manage-pendaftar.update-status', $pendaftar->id) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('PATCH')
-                                        <select name="status_pembayaran" onchange="this.form.submit()" class="text-xs border-gray-300 focus:border-brand-500 focus:ring-brand-500 rounded-lg shadow-sm font-semibold {{ $pendaftar->status_pembayaran === 'Lunas' ? 'bg-green-50' : ($pendaftar->status_pembayaran === 'Dibatalkan' ? 'bg-red-50' : 'bg-amber-50') }}">
-                                            <option value="Pending" {{ $pendaftar->status_pembayaran === 'Pending' ? 'selected' : '' }}>Pending</option>
-                                            <option value="Lunas" {{ $pendaftar->status_pembayaran === 'Lunas' ? 'selected' : '' }}>Lunas</option>
-                                            <option value="Dibatalkan" {{ $pendaftar->status_pembayaran === 'Dibatalkan' ? 'selected' : '' }}>Batalkan</option>
-                                        </select>
-                                    </form>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col gap-2 items-end">
+                                        <form action="{{ route('manage-pendaftar.update-status', $pendaftar->id) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('PATCH')
+                                            <select name="status_pembayaran" onchange="this.form.submit()" class="text-xs border-gray-300 focus:border-brand-500 focus:ring-brand-500 rounded-lg shadow-sm font-semibold {{ $pendaftar->status_pembayaran === 'Lunas' ? 'bg-green-50' : ($pendaftar->status_pembayaran === 'Dibatalkan' ? 'bg-red-50' : 'bg-amber-50') }}">
+                                                <option value="Pending" {{ $pendaftar->status_pembayaran === 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="Lunas" {{ $pendaftar->status_pembayaran === 'Lunas' ? 'selected' : '' }}>Lunas</option>
+                                                <option value="Dibatalkan" {{ $pendaftar->status_pembayaran === 'Dibatalkan' ? 'selected' : '' }}>Batalkan</option>
+                                            </select>
+                                        </form>
+                                        
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <a href="{{ route('manage-pendaftar.edit', $pendaftar->id) }}" class="text-brand-600 hover:text-brand-800 text-xs font-semibold bg-brand-50 px-2 py-1 rounded">Edit</a>
+                                            <form method="POST" action="{{ route('manage-pendaftar.destroy', $pendaftar->id) }}" onsubmit="return confirm('Yakin ingin menghapus data pendaftaran ini permanen?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800 text-xs font-semibold bg-red-50 px-2 py-1 rounded">Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

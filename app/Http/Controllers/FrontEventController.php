@@ -43,7 +43,7 @@ class FrontEventController extends Controller
         // Filter berdasarkan kategori (Jenis Event)
         if ($request->filled('kategori_id')) {
             $query->whereHas('kategoris', function ($q) use ($request) {
-                $q->where('master_jenis_event_id', $request->kategori_id);
+                $q->where('jenis_event_id', $request->kategori_id);
             });
         }
 

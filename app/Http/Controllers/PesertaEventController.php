@@ -148,6 +148,17 @@ class PesertaEventController extends Controller
         return redirect()->route('events')->with('success', 'Pendaftaran berhasil! Silakan lakukan pembayaran (Status: Pending).');
     }
 
+    public function cancel($id)
+    {
+        $pendaftaran = Pendaftaran::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        $pendaftaran->delete();
+
+        return redirect()->back()->with('success', 'Pendaftaran berhasil dibatalkan.');
+    }
+
     /**
      * API untuk cek kupon secara real-time via AJAX.
      */

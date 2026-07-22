@@ -54,4 +54,45 @@ class AdminPendaftarController extends Controller
 
         return back()->with('success', 'Status pembayaran berhasil diperbarui!');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $pendaftaran = Pendaftaran::with(['user', 'eventKategori.event', 'eventKategori.jenisEvent'])->findOrFail($id);
+        return view('admin.pendaftar.edit', compact('pendaftaran'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'ukuran_jersey' => 'required|string|in:S,M,L,XL,XXL',
+            'golongan_darah' => 'required|string|in:A,B,AB,O',
+            'status_pembayaran' => 'required|in:Pending,Lunas,Dibatalkan'
+        ]);
+
+        $pendaftaran = Pendaftaran::findOrFail($id);
+        $pendaftaran->update([
+            'ukuran_jersey' => $request->ukuran_jersey,
+            'golongan_darah' => $request->golongan_darah,
+            'status_pembayaran' => $request->status_pembayaran,
+        ]);
+
+        return redirect()->route('manage-pendaftar.index')->with('success', 'Data pendaftar berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $pendaftaran = Pendaftaran::findOrFail($id);
+        $pendaftaran->delete();
+
+        return redirect()->route('manage-pendaftar.index')->with('success', 'Data pendaftar berhasil dihapus.');
+    }
 }
